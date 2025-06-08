@@ -16,9 +16,12 @@ let useOpenAI = false;
 // OpenAI API key storage
 let openAIApiKey = '';
 
-// If environment variable is provided, use it and enable OpenAI by default
-if (process.env.NEXT_PUBLIC_OPENAI_API_KEY) {
-  openAIApiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+// Hardcoded API key (if you prefer not to use the settings UI)
+const HARDCODED_API_KEY = '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'; // PUT YOUR API KEY HERE (e.g., 'sk-...')
+
+// If a hardcoded key is provided, use it and enable OpenAI by default
+if (HARDCODED_API_KEY) {
+  openAIApiKey = HARDCODED_API_KEY;
   useOpenAI = true;
 }
 
