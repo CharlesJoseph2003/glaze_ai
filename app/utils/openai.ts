@@ -9,11 +9,9 @@ export async function generateOpenAIComments(
   postContent: string, 
   count: number = 3
 ): Promise<Comment[]> {
-  // Get API key from environment, localStorage, or hardcoded value
-  const HARDCODED_API_KEY = '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'; // PUT YOUR API KEY HERE (e.g., 'sk-...')
-  
-  const OPENAI_API_KEY = HARDCODED_API_KEY || 
-    process.env.NEXT_PUBLIC_OPENAI_API_KEY || 
+  // Get API key from environment or localStorage
+  // IMPORTANT: Never hardcode API keys in your code
+  const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY || 
     (typeof window !== 'undefined' ? localStorage.getItem('openai_api_key') || '' : '');
   
   // If no API key is provided, fall back to the local generation
