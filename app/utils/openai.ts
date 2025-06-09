@@ -10,11 +10,13 @@ export async function generateOpenAIComments(
   count: number = 3
 ): Promise<Comment[]> {
   // Get API key from environment, localStorage, or hardcoded value
-  const HARDCODED_API_KEY = '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'; // PUT YOUR API KEY HERE (e.g., 'sk-...')
-  
-  const OPENAI_API_KEY = HARDCODED_API_KEY || 
+  const OPENAI_API_KEY = 
     process.env.NEXT_PUBLIC_OPENAI_API_KEY || 
     (typeof window !== 'undefined' ? localStorage.getItem('openai_api_key') || '' : '');
+
+  // Debug prints for troubleshooting
+  console.log("[DEBUG] Execution context:", typeof window === "undefined" ? "server" : "client");
+  console.log("[DEBUG] OPENAI_API_KEY (redacted):", OPENAI_API_KEY ? OPENAI_API_KEY.slice(0, 8) + "..." : "undefined");
   
   // If no API key is provided, fall back to the local generation
   if (!OPENAI_API_KEY) {
@@ -46,8 +48,10 @@ export async function generateOpenAIComments(
       Example: [{"username": "EagleScout42", "content": "I will give you my life"}]
     `;
 
+    // Debug print for model name
+    console.log("[DEBUG] OpenAI model:", "gpt-4o");
     const response = await client.chat.completions.create({
-      model: "gpt-4", // You can change to gpt-3.5-turbo for lower cost
+      model: "gpt-4o", // You can change to gptples-3.5-turbo for lower cost
       messages: [
         {
           role: "system",
@@ -62,14 +66,15 @@ export async function generateOpenAIComments(
       max_tokens: 300
     });
 
-    const commentsText = response.choices[0].message.content || '';
-    
+    let commentsText = response.choices[0].message.content || '';
+    // Remove Markdown code block if present
+    commentsText = commentsText.replace(/```json|```/g, '').trim();
     // Parse the JSON response
     let parsedComments;
     try {
       parsedComments = JSON.parse(commentsText);
     } catch (e) {
-      console.error('Failed to parse OpenAI response:', e);
+      console.error('Failed to parse OpenAI response:', e, commentsText);
       return generateLocalComments(postId, count);
     }
 
@@ -87,7 +92,7 @@ export async function generateOpenAIComments(
       };
     });
   } catch (error) {
-    console.error('Error generating OpenAI comments:', error);
+    console.error('[DEBUG] Error generating OpenAI comments:', error);
     // Fall back to local generation if API call fails
     return generateLocalComments(postId, count);
   }
