@@ -132,6 +132,7 @@ export default function Post({ post, onUpdate }: PostProps) {
       if (likeIntervalRef.current) clearInterval(likeIntervalRef.current);
       if (commentIntervalRef.current) clearInterval(commentIntervalRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

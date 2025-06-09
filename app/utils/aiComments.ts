@@ -62,7 +62,7 @@ const generateRecentTimestamp = (): string => {
 };
 
 // Generate a single AI comment
-export const generateAIComment = (postId: string): Comment => {
+export const generateAIComment = (): Comment => {
   const template = getRandomItem(praiseTemplates);
   const emoji = getRandomItem(positiveEmojis);
   const content = template.replace('{emoji}', emoji);
@@ -81,7 +81,7 @@ export const generateAIComments = (postId: string, count: number): Comment[] => 
   const comments: Comment[] = [];
   
   for (let i = 0; i < count; i++) {
-    comments.push(generateAIComment(postId));
+    comments.push(generateAIComment());
   }
   
   // Sort by timestamp (newest first)

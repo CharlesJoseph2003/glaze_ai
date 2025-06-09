@@ -79,7 +79,7 @@ export async function generateOpenAIComments(
     }
 
     // Convert to our Comment type
-    return parsedComments.map((comment: any, index: number) => {
+    return parsedComments.map((comment: { content: string; username: string }, index: number) => {
       // Generate random likes between 1 and 15
       const randomLikes = Math.floor(Math.random() * 15) + 1;
       
@@ -109,7 +109,7 @@ export function generateLocalComments(postId: string, count: number): Comment[] 
   const emojis = ['👏', '🙌', '💯', '🔥', '✨', '❤️', '👍', '🤩', '😍', '🚀', '💪', '🌟'];
   
   // Generate dynamic praise comments instead of using hardcoded ones
-  const generatePraiseContent = (postId: string): string => {
+  const generatePraiseContent = (): string => {
     // Use a combination of patterns to generate dynamic praise
     const praisePatterns = [
       // Enthusiasm patterns
@@ -156,7 +156,7 @@ export function generateLocalComments(postId: string, count: number): Comment[] 
 
   for (let i = 0; i < count; i++) {
     const username = usernames[Math.floor(Math.random() * usernames.length)];
-    let content = generatePraiseContent(postId);
+    let content = generatePraiseContent();
     
     // Add emoji with 60% probability
     if (Math.random() > 0.4) {

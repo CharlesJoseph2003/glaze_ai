@@ -34,8 +34,7 @@ export const setOpenAIApiKey = (apiKey: string): void => {
   if (typeof window !== 'undefined') {
     localStorage.setItem('openai_api_key', apiKey);
   }
-  // Update environment variable
-  process.env.NEXT_PUBLIC_OPENAI_API_KEY = apiKey;
+
 };
 
 // Get the current OpenAI API key
@@ -54,7 +53,7 @@ export const initializeOpenAISettings = (): void => {
     const storedApiKey = localStorage.getItem('openai_api_key');
     if (storedApiKey) {
       openAIApiKey = storedApiKey;
-      process.env.NEXT_PUBLIC_OPENAI_API_KEY = storedApiKey;
+
       useOpenAI = true;
     }
   }
